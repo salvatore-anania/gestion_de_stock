@@ -187,7 +187,8 @@ class Affichage:
     def choose_categorie(self,action):
         self.clear_window()
         self.listes_nom_categories=[]
-        self.listes_nom_categories=self.__crud_categorie.read_categorie_all()
+        for categorie in self.__crud_categorie.read_categorie_all():
+            self.listes_nom_categories.append(categorie[1])
         labelChoix = Label(self.__fenetre, text = "Veuillez faire un choix !", font=("Arial", 20))
         labelChoix.grid(row=0,**self.__grid_dict)
         # Création de la Combobox via la méthode ttk.Combobox()
