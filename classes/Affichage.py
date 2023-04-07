@@ -42,7 +42,7 @@ class Affichage:
         produits=self.__crud_produit.read_produits()
         frame_centrale=Frame(self.__fenetre, bg="grey")
         
-        frame_graphique=Frame(frame_centrale)
+        frame_graphique=Frame(frame_centrale,bg="grey")
         Graphique(frame_graphique,self.__crud_categorie)
         frame_test=Frame(frame_centrale,width=self.__fenetre.winfo_width())
         frame_frame=Frame(frame_centrale)
@@ -78,16 +78,17 @@ class Affichage:
                           , height=first5rows_height)
         # Set the canvas scrolling region
         canvas.config(scrollregion=canvas.bbox("all"))
-        frame_frame.pack()
-        frame_centrale.pack()
+        
         
         Button(frame_test, font=("Arial", 20),text="Ajouter produit", bg="red" , command= lambda:self.add_produit()).grid(row=line,column=0)
         Button(frame_test, font=("Arial", 20),text="Supprimer produit", bg="red" , command= lambda:self.choose_product(1)).grid(row=line,column=1)
         Button(frame_test, font=("Arial", 20),text="Modifier produit", bg="red" , command= lambda:self.choose_product(2)).grid(row=line,column=2)
         Button(frame_test, font=("Arial", 20),text="Afficher par categorie", bg="red" , command= lambda:self.affichage_par_categories()).grid(row=line,column=3)
         Button(frame_test, font=("Arial", 20),text="Exporter", bg="red" , command= lambda:self.__export.export()).grid(row=line,column=4)
-        frame_test.pack()
-        frame_graphique.pack()    
+        frame_frame.pack(expand=True)
+        frame_centrale.pack(expand=True,fill=BOTH)
+        frame_test.pack(expand=True)
+        frame_graphique.pack(expand=True,fill=BOTH)
         
         
         self.__fenetre.mainloop()
@@ -236,7 +237,7 @@ class Affichage:
         produits=self.__crud_categorie.read_categorie()
         frame_centrale=Frame(self.__fenetre, bg="grey")
         
-        frame_graphique=Frame(frame_centrale)
+        frame_graphique=Frame(frame_centrale,bg="grey")
         Graphique(frame_graphique,self.__crud_categorie)
         frame_test=Frame(frame_centrale,width=self.__fenetre.winfo_width())
         frame_frame=Frame(frame_centrale)
@@ -270,18 +271,17 @@ class Affichage:
         main_frame.config(width=self.__fenetre.winfo_width()-(self.__fenetre.winfo_width()-info_frame.winfo_width())+ vsb.winfo_width()*2
                           , height=first5rows_height)
         # Set the canvas scrolling region
-        canvas.config(scrollregion=canvas.bbox("all"))
-        frame_frame.pack()
-        frame_centrale.pack()
-        
+        canvas.config(scrollregion=canvas.bbox("all"))    
 
         Button(frame_test, font=("Arial", 20),text="Ajouter categorie", bg="red" , command= lambda:self.add_categorie()).grid(row=line,column=0)
         Button(frame_test, font=("Arial", 20),text="Supprimer categorie", bg="red" , command= lambda:self.choose_categorie(1)).grid(row=line,column=1)
         Button(frame_test, font=("Arial", 20),text="Modifier categorie", bg="red" , command= lambda:self.choose_categorie(2)).grid(row=line,column=2)
         Button(frame_test, font=("Arial", 20),text="Afficher par produit", bg="red" , command= lambda:self.affichage_par_produits()).grid(row=line,column=3)
         Button(frame_test, font=("Arial", 20),text="Exporter une categorie", bg="red" , command= lambda:self.choose_categorie(3)).grid(row=line,column=4)
-        frame_test.pack()
-        frame_graphique.pack()    
+        frame_frame.pack(expand=True)
+        frame_centrale.pack(expand=True,fill=BOTH)
+        frame_test.pack(expand=True)
+        frame_graphique.pack(expand=True,fill=BOTH)   
         
         
         self.__fenetre.mainloop()

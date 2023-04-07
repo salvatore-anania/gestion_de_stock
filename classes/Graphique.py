@@ -16,17 +16,15 @@ class Graphique:
         nombre_produits=[]
         nom_categorie = []
         for nom in categorie.read_categorie_all():
-            nom_categorie.append(str(nom[0])+")"+nom[1])
+            nom_categorie.append(str(nom[0])+")\n"+nom[1])
             nombre_produits.append(categorie.count_produit_in_categorie(nom[1]))
         # create a figure
         figure = Figure(figsize=(len(nom_categorie), 5), dpi=100)
-
+        figure.set_facecolor('grey')
         # create FigureCanvasTkAgg object
         figure_canvas = FigureCanvasTkAgg(figure, fenetre)
-
         # create axes
         axes = figure.add_subplot()
-
         # create the barchart
         axes.bar(nom_categorie, nombre_produits)
         axes.set_title('Nombre de produits par categorie')
