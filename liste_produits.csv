@@ -1,38 +1,18 @@
-"id","nom","description","prix","quantite","id_categorie"
-
-1,"oeuf","Poule bio",1,12,1
-
-2,"lait","Vache en plein air",3,6,1
-
-3,"gateaux","Gout chocolat",6,50,1
-
-4,"sucre","Sucre de canne",5,30,1
-
-5,"vin","production  local",10,50,2
-
-6,"whisky","Grand brandy",15,50,2
-
-7,"rhum","des iles",1,12,2
-
-8,"courgette","bien verte",3,6,3
-
-9,"poireaux","pas au menton",6,50,3
-
-10,"carotte","approuve par les lapins",5,50,3
-
-11,"raisin","de France",10,50,4
-
-13,"kiwi","pas le volatile",1,12,4
-
-14,"fraise","bien rouge",3,6,4
-
-15,"chaussette","de type socket",6,50,5
-
-16,"chaussure","basket confortable",5,50,5
-
-17,"jean","marque levis",10,50,5
-
-18,"t-shirt","conton bio",15,50,5
-
-19,"parfum","a la rose",34,23,8
-
+"id","nom","description","prix","quantite","id_categorie"
+1,"oeuf","Poule bio",1,12,1
+2,"lait","Vache en plein air",3,6,1
+3,"gateaux","Gout chocolat",6,50,1
+4,"sucre","Sucre de canne",5,30,1
+6,"whisky","Grand brandy",15,50,2
+7,"rhum","des îles",1,12,2
+8,"courgette","bien verte",3,6,3
+9,"poireaux","pas au menton",6,50,3
+10,"carotte","approuvé par les lapins",5,50,3
+11,"raisin","de France",10,50,4
+13,"kiwi","pas le volatile",1,12,4
+14,"fraise","bien rouge",3,6,4
+15,"chaussette","de type socket",6,50,5
+16,"chaussure","basket confortable",5,50,5
+17,"jean","marque levis",10,50,5
+18,"t-shirt","conton bio",15,50,5
+19,"parfum","a la rose",34,23,8

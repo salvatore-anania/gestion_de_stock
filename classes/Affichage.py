@@ -22,8 +22,9 @@ class Affichage:
             #creer la database boutique si inexistante
             cursor.execute("CREATE database boutique")
         
-        self.__crud_produit=CRUD_produit(conn)
         self.__crud_categorie=CRUD_categorie(conn)
+        self.__crud_produit=CRUD_produit(conn)
+        
         self.__export=Export(conn)
         
         self.__fenetre = Tk()
@@ -128,17 +129,38 @@ class Affichage:
             self.__crud_produit.delete_produit(nom)
             self.affichage_par_produits()
         elif choice=="categorie":
-            self.__crud_categorie.delete_categorie(nom)
-            self.affichage_par_categories()
+            if self.__crud_categorie.delete_categorie(nom):
+                self.affichage_par_categories()
+            else:
+                self.clear_window()
+                Label(self.__fenetre, font=("Arial", 20),text="Supprimer la catégorie et tout ses produits, ou annuler la suppression ?",bg='grey',borderwidth=1,relief="solid").grid(row=3,columnspan=5, **self.__grid_dict)
+                Button(self.__fenetre, font=("Arial", 20),text="Annuler", bg="red" , command= lambda:self.affichage_par_categories()).grid(row=4,column=0,**self.__grid_dict)
+                Button(self.__fenetre, font=("Arial", 20),text="Tout supprimer", bg="red" , command= lambda:self.force_delete(nom)).grid(row=4,column=1,**self.__grid_dict)
+
+    def force_delete(self,nom):
+        self.__crud_categorie.force_delete(nom)
+        self.affichage_par_categories()
         
-        
-    def confirmer_ajout(self,info,choice):
+    def confirmer_ajout(self,info,choice,id=0,produit=0):
         if choice=="produit":
-            self.__crud_produit.create_produit(info)
-            self.affichage_par_produits()
+            test=self.__crud_produit.create_produit(info)
+            if test!="Cette catégorie n'existe pas":
+                Label(self.__fenetre, font=("Arial", 20),text=test,bg='grey',borderwidth=1,relief="solid").grid(row=3,columnspan=5, **self.__grid_dict)   
+            elif test=="Cette catégorie n'existe pas":
+                test+=", voulez vous la créer ?"
+                Label(self.__fenetre, font=("Arial", 20),text=test,bg='grey',borderwidth=1,relief="solid").grid(row=3,columnspan=5, **self.__grid_dict)
+                Button(self.__fenetre, font=("Arial", 20),text="Annuler", bg="red" , command= lambda:self.affichage_par_categories()).grid(row=4,column=0,**self.__grid_dict)
+                Button(self.__fenetre, font=("Arial", 20),text="Créer catégorie", bg="red" , command= lambda:self.add_categorie(info[4],info)).grid(row=4,column=1,**self.__grid_dict)
+
+            else:
+                self.affichage_par_produits()
         elif choice=="categorie":
-            self.__crud_categorie.create_categorie(info)
-            self.affichage_par_categories()
+            self.__crud_categorie.create_categorie(info,id)
+            if id:
+                self.__crud_produit.create_produit(produit)
+                self.affichage_par_produits()
+            else:
+                self.affichage_par_categories()
         
     def confirmer_modification(self,info,choice):
         if choice=="produit":
@@ -167,12 +189,12 @@ class Affichage:
             Button(self.__fenetre, font=("Arial", 20),text="Confirmer choix", bg="red" , command= lambda:self.modify_produit(liste.get())).grid(row=2,**self.__grid_dict)
     
         
-    def add_categorie(self):
+    def add_categorie(self,id=0,produit=0):
         self.clear_window()
         Label(self.__fenetre, font=("Arial", 20),text="Nom de la categorie",bg='grey',borderwidth=1,relief="solid").grid(row=0,column=0, **self.__grid_dict)
         entry=Entry(self.__fenetre,font=("Arial", 20),borderwidth=1,relief="solid")
         entry.grid(row=1,column=0, **self.__grid_dict)
-        Button(self.__fenetre, font=("Arial", 20),text="Confirmer ajout", bg="red" , command= lambda:self.confirmer_ajout([entry.get()],"categorie")).grid(row=2,**self.__grid_dict)
+        Button(self.__fenetre, font=("Arial", 20),text="Confirmer ajout", bg="red" , command= lambda:self.confirmer_ajout([entry.get()],"categorie",id,produit)).grid(row=2,**self.__grid_dict)
 
     def modify_categorie(self,nom):
         self.clear_window()

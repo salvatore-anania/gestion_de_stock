@@ -19,7 +19,7 @@ class Graphique:
             nom_categorie.append(str(nom[0])+")"+nom[1])
             nombre_produits.append(categorie.count_produit_in_categorie(nom[1]))
         # create a figure
-        figure = Figure(figsize=(6, 4), dpi=100)
+        figure = Figure(figsize=(len(nom_categorie), 5), dpi=100)
 
         # create FigureCanvasTkAgg object
         figure_canvas = FigureCanvasTkAgg(figure, fenetre)

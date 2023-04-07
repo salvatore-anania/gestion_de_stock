@@ -10,7 +10,7 @@ class CRUD_produit:
         
         if not result:
             #creer la table produits si inexistante et la remplie
-            self.__database.execute("CREATE TABLE produits(id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, nom varchar(255),description text, prix int, quantite int,id_categorie int)")
+            self.__database.execute("CREATE TABLE produits(id INT PRIMARY KEY NOT NULL AUTO_INCREMENT, nom varchar(255),description text, prix int, quantite int,id_categorie int,FOREIGN KEY (id_categorie) REFERENCES categories(Id) ON UPDATE CASCADE)")
             self.create_produit(['oeuf', 'Poule bio', 1,12,1])
             self.create_produit(['lait', 'Vache en plein air', 3,6,1])
             self.create_produit(['gateaux', 'Gout chocolat', 6,50,1])
@@ -40,8 +40,22 @@ class CRUD_produit:
         self.__conn.commit()
         
     def create_produit(self,info):
-        self.__database.execute(f"insert into produits (nom,description,prix,quantite,id_categorie) values('{info[0]}','{info[1]}',{info[2]},{info[3]},{info[4]})")
-        self.__conn.commit()
+        if "" in info :
+            return "Veuillez remplir tout les champs"   
+        try:
+            self.__database.execute(f"insert into produits (nom,description,prix,quantite,id_categorie) values('{info[0]}','{info[1]}',{info[2]},{info[3]},{info[4]})")
+        except:
+            self.__database.execute("select id from categories")
+            test=self.__database.fetchall()
+            try:
+                int(info[2])
+                int(info[3])
+            except:
+                return "Les champs quantité et prix doivent être des nombres"
+            else:
+                return "Cette catégorie n'existe pas"
+        else:
+            self.__conn.commit()
         
     def read_produits(self):
         liste_produits=[["Nom du produit","Description du produit","Prix du produit","Quantité du produit","ID categorie","blue"]]
@@ -63,7 +77,22 @@ class CRUD_produit:
         print(resultat)
         
     def update_produit(self,info):
-        self.__database.execute(f"UPDATE produits set nom='{info[1]}',description='{info[2]}',prix={info[3]},quantite={info[4]},id_categorie={info[5]} where id={info[0]}")
-        self.__conn.commit()
+        if "" in info :
+            return "Veuillez remplir tout les champs"
+        try:
+            self.__database.execute(f"UPDATE produits set nom='{info[1]}',description='{info[2]}',prix={info[3]},quantite={info[4]},id_categorie={info[5]} where id={info[0]}")
+        except:
+            self.__database.execute("select id from categories")
+            test=self.__database.fetchall()
+            try:
+                int(info[2])
+                int(info[3])
+            except:
+                return "Les champs quantité et prix doivent être des nombres"
+            else:
+                return "Cette catégorie n'existe pas"
+        else:
+            self.__conn.commit()
+        
 
     

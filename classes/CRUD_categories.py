@@ -1,4 +1,5 @@
 import csv
+import mysql
 class CRUD_categorie:
     def __init__(self,conn):
         self.__conn=conn
@@ -18,13 +19,27 @@ class CRUD_categorie:
     
     def delete_table_categorie(self):
         self.__database.execute("drop table categories")
-    
+            
     def delete_categorie(self,nom):
+        try:
+            self.__database.execute(f"delete from categories where nom='{nom}'")
+        except:
+            return False
+        else:
+            self.__conn.commit()
+            return True
+        
+    def force_delete(self,nom):
+        self.__database.execute(f"delete from produits where id_categorie=(select categories.id from categories where categories.nom='{nom}')")
+        self.__conn.commit()
         self.__database.execute(f"delete from categories where nom='{nom}'")
         self.__conn.commit()  
         
-    def create_categorie(self,nom):
-        self.__database.execute("insert into categories(nom) values (%s)",nom)
+    def create_categorie(self,nom,id=0):
+        if id:
+            self.__database.execute(f"insert into categories(id,nom) values ({id},'{nom[0]}')")
+        else:
+            self.__database.execute("insert into categories(nom) values (%s)",nom)
         self.__conn.commit()       
         
     def read_categorie_all(self):
