@@ -15,7 +15,7 @@ class Graphique:
     def __init__(self,fenetre,categorie):
         nombre_produits=[]
         nom_categorie = []
-        for nom in categorie.read_categorie_all():
+        for nom in categorie.get_categorie_all():
             nom_categorie.append(str(nom[0])+")\n"+nom[1])
             nombre_produits.append(categorie.count_produit_in_categorie(nom[1]))
         # create a figure

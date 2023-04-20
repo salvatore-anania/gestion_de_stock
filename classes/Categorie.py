@@ -1,6 +1,6 @@
 import csv
-import mysql
-class CRUD_categorie:
+
+class Categorie:
     def __init__(self,conn):
         self.__conn=conn
         self.__database=conn.cursor()
@@ -42,12 +42,12 @@ class CRUD_categorie:
             self.__database.execute("insert into categories(nom) values (%s)",nom)
         self.__conn.commit()       
         
-    def read_categorie_all(self):
+    def get_categorie_all(self):
         self.__database.execute("SELECT id,nom FROM categories")
         categories=self.__database.fetchall()
         return categories
         
-    def read_categorie(self):
+    def get_categorie(self):
         list_categorie=[]
         self.__database.execute("SELECT categories.nom,produits.nom,description,prix,quantite,categories.id FROM categories inner JOIN produits ON id_categorie = categories.id order by categories.id")
         categories=self.__database.fetchall()
@@ -62,30 +62,14 @@ class CRUD_categorie:
                 list_categorie.append([categorie[1],categorie[2],categorie[3],categorie[4],"black"]) 
         return list_categorie     
     
-    def read_one_categorie(self,nom):
+    def get_one_categorie(self,nom):
         self.__database.execute(f"SELECT id,nom FROM categories where nom='{nom}'")
         categorie=self.__database.fetchone()
         return categorie
     
-    def update_categorie(self,info):
+    def set_categorie(self,info):
         self.__database.execute(f"UPDATE categories set nom='{info[1]}' where id={info[0]}")   
         self.__conn.commit()
-        
-    def export(self):
-        self.__database.execute('select * from produits')
-        with open("liste_produits.csv","w") as outfile:
-            writer = csv.writer(outfile, quoting=csv.QUOTE_NONNUMERIC)
-            writer.writerow(col[0] for col in self.__database.description)
-            for row in self.__database:
-                writer.writerow(row)
-                
-    def export_categorie(self,categorie):
-        self.__database.execute(f"SELECT produits.nom,description,prix,quantite FROM categories inner JOIN produits where id_categorie=(select categories.id where categories.nom='{categorie}')")
-        with open(f"categorie_{categorie}.csv","w") as outfile:
-            writer = csv.writer(outfile, quoting=csv.QUOTE_NONNUMERIC)
-            writer.writerow(col[0] for col in self.__database.description)
-            for row in self.__database:
-                writer.writerow(row)
 
     def count_produit_in_categorie(self,categorie):
         self.__database.execute(f"SELECT count(produits.id) FROM produits inner JOIN categories where id_categorie=(select categories.id where categories.nom='{categorie}')")

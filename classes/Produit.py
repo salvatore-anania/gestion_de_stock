@@ -1,5 +1,5 @@
 
-class CRUD_produit:
+class Produit:
     def __init__(self,conn):
         
         self.__conn=conn
@@ -57,7 +57,7 @@ class CRUD_produit:
         else:
             self.__conn.commit()
         
-    def read_produits(self):
+    def get_produits(self):
         liste_produits=[["Nom du produit","Description du produit","Prix du produit","Quantité du produit","ID categorie","blue"]]
         self.__database.execute("SELECT nom,description,prix,quantite,id_categorie FROM produits")
         produits=self.__database.fetchall()
@@ -66,17 +66,17 @@ class CRUD_produit:
         return liste_produits
     
     
-    def read_one_produit(self,nom):
+    def get_one_produit(self,nom):
         self.__database.execute(f"SELECT id,nom,description,prix,quantite,id_categorie FROM produits where nom='{nom}'")
         produit=self.__database.fetchone()
         return produit
     
-    def read_column(self,column):
+    def get_column(self,column):
         self.__database.execute(f"SELECT {column} FROM produits")
         resultat=self.__database.fetchall()
         print(resultat)
         
-    def update_produit(self,info):
+    def set_produit(self,info):
         if "" in info :
             return "Veuillez remplir tout les champs"
         try:

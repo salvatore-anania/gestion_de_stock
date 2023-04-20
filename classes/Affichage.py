@@ -3,8 +3,8 @@ from tkinter.messagebox import *
 from tkinter import ttk
 
 from classes.Graphique import Graphique
-from classes.CRUD_produits import CRUD_produit
-from classes.CRUD_categories import CRUD_categorie
+from classes.Produit import Produit
+from classes.Categorie import Categorie
 from classes.Export import Export
 from classes.connection import connexion
 
@@ -22,8 +22,8 @@ class Affichage:
             #creer la database boutique si inexistante
             cursor.execute("CREATE database boutique")
         
-        self.__crud_categorie=CRUD_categorie(conn)
-        self.__crud_produit=CRUD_produit(conn)
+        self.__Categorie=Categorie(conn)
+        self.__Produit=Produit(conn)
         
         self.__export=Export(conn)
         
@@ -39,11 +39,11 @@ class Affichage:
     def affichage_par_produits(self):
         self.listes_nom_produits=[]
         self.clear_window()
-        produits=self.__crud_produit.read_produits()
+        produits=self.__Produit.get_produits()
         frame_centrale=Frame(self.__fenetre, bg="grey")
         
         frame_graphique=Frame(frame_centrale,bg="grey")
-        Graphique(frame_graphique,self.__crud_categorie)
+        Graphique(frame_graphique,self.__Categorie)
         frame_test=Frame(frame_centrale,width=self.__fenetre.winfo_width())
         frame_frame=Frame(frame_centrale)
         main_frame=Frame(frame_frame, bg="grey")
@@ -110,7 +110,7 @@ class Affichage:
         entrys=[]
         produits=[]
         produits.append(["Nom du produit","Description du produit","Prix du produit","Quantité du produit","ID categorie"])
-        produits.append(self.__crud_produit.read_one_produit(nom))
+        produits.append(self.__Produit.get_one_produit(nom))
         count=0
         for info in produits[0]:
             Label(self.__fenetre, font=("Arial", 20),text=info,bg='grey',fg='blue',borderwidth=1,relief="solid").grid(row=0,column=count, **self.__grid_dict)
@@ -127,10 +127,10 @@ class Affichage:
     
     def confirmer_delete(self,nom,choice):
         if choice=="produit":
-            self.__crud_produit.delete_produit(nom)
+            self.__Produit.delete_produit(nom)
             self.affichage_par_produits()
         elif choice=="categorie":
-            if self.__crud_categorie.delete_categorie(nom):
+            if self.__Categorie.delete_categorie(nom):
                 self.affichage_par_categories()
             else:
                 self.clear_window()
@@ -139,12 +139,12 @@ class Affichage:
                 Button(self.__fenetre, font=("Arial", 20),text="Tout supprimer", bg="red" , command= lambda:self.force_delete(nom)).grid(row=4,column=1,**self.__grid_dict)
 
     def force_delete(self,nom):
-        self.__crud_categorie.force_delete(nom)
+        self.__Categorie.force_delete(nom)
         self.affichage_par_categories()
         
     def confirmer_ajout(self,info,choice,id=0,produit=0):
         if choice=="produit":
-            test=self.__crud_produit.create_produit(info)
+            test=self.__Produit.create_produit(info)
             if test!="Cette catégorie n'existe pas":
                 Label(self.__fenetre, font=("Arial", 20),text=test,bg='grey',borderwidth=1,relief="solid").grid(row=3,columnspan=5, **self.__grid_dict)   
             elif test=="Cette catégorie n'existe pas":
@@ -156,19 +156,19 @@ class Affichage:
             else:
                 self.affichage_par_produits()
         elif choice=="categorie":
-            self.__crud_categorie.create_categorie(info,id)
+            self.__Categorie.create_categorie(info,id)
             if id:
-                self.__crud_produit.create_produit(produit)
+                self.__Produit.create_produit(produit)
                 self.affichage_par_produits()
             else:
                 self.affichage_par_categories()
         
     def confirmer_modification(self,info,choice):
         if choice=="produit":
-            self.__crud_produit.update_produit(info)
+            self.__Produit.set_produit(info)
             self.affichage_par_produits()
         elif choice=="categorie":
-            self.__crud_categorie.update_categorie(info)
+            self.__Categorie.set_categorie(info)
             self.affichage_par_categories()
         
     def clear_window(self):
@@ -199,7 +199,7 @@ class Affichage:
 
     def modify_categorie(self,nom):
         self.clear_window()
-        categorie=self.__crud_categorie.read_one_categorie(nom)
+        categorie=self.__Categorie.get_one_categorie(nom)
         Label(self.__fenetre, font=("Arial", 20),text="Nom de la categorie",bg='grey',borderwidth=1,relief="solid").grid(row=0,column=0, **self.__grid_dict)
         text = StringVar()
         text.set(nom)
@@ -210,7 +210,7 @@ class Affichage:
     def choose_categorie(self,action):
         self.clear_window()
         self.listes_nom_categories=[]
-        for categorie in self.__crud_categorie.read_categorie_all():
+        for categorie in self.__Categorie.get_categorie_all():
             self.listes_nom_categories.append(categorie[1])
         labelChoix = Label(self.__fenetre, text = "Veuillez faire un choix !", font=("Arial", 20))
         labelChoix.grid(row=0,**self.__grid_dict)
@@ -234,11 +234,11 @@ class Affichage:
     def affichage_par_categories(self):
         self.listes_nom_produits=[]
         self.clear_window()
-        produits=self.__crud_categorie.read_categorie()
+        produits=self.__Categorie.get_categorie()
         frame_centrale=Frame(self.__fenetre, bg="grey")
         
         frame_graphique=Frame(frame_centrale,bg="grey")
-        Graphique(frame_graphique,self.__crud_categorie)
+        Graphique(frame_graphique,self.__Categorie)
         frame_test=Frame(frame_centrale,width=self.__fenetre.winfo_width())
         frame_frame=Frame(frame_centrale)
         main_frame=Frame(frame_frame, bg="grey")
