@@ -39,7 +39,7 @@ class Categorie:
         if id:
             self.__database.execute(f"insert into categories(id,nom) values ({id},'{nom[0]}')")
         else:
-            self.__database.execute("insert into categories(nom) values (%s)",nom)
+            self.__database.execute(f"insert into categories(nom) values ({nom})")
         self.__conn.commit()       
         
     def get_categorie_all(self):
